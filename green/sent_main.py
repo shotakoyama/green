@@ -1,5 +1,5 @@
 import numpy as np
-from .load import load_dhrn_data, load_hdrn_data
+from .load import load_dcrn_data, load_cdrn_data
 from .score import (
         rn_accum_to_f,
         argmax,
@@ -17,17 +17,17 @@ def sent_main(args):
 
 def sent_simple(args):
     params = [beta_to_alpha_beta(beta) for beta in args.beta]
-    _, _, _, dhrn_accum = load_dhrn_data(args)
+    _, _, _, dcrn_accum = load_dcrn_data(args)
 
-    for hrn_accum in dhrn_accum:
-        bh_score = [[
+    for crn_accum in dcrn_accum:
+        bc_score = [[
             rn_accum_to_f(rn_accum, alpha)
-            for rn_accum in hrn_accum]
+            for rn_accum in crn_accum]
             for alpha, _ in params]
         bfs = [[
             f_result(score, args.digit)
-            for score in h_score]
-            for h_score in bh_score]
+            for score in c_score]
+            for c_score in bc_score]
         fs = [f for fs in bfs for f in fs]
         line = '\t'.join(fs)
         print(line)
@@ -35,10 +35,10 @@ def sent_simple(args):
 
 def sent_verbose(args):
     params = [beta_to_alpha_beta(beta) for beta in args.beta]
-    s_dat, rs_dat, hs_dat, dhrn_accum = load_dhrn_data(args)
+    s_dat, rs_dat, cs_dat, dcrn_accum = load_dcrn_data(args)
 
-    for d, hrn_accum in enumerate(dhrn_accum):
-        for h, rn_accum in enumerate(hrn_accum):
+    for d, crn_accum in enumerate(dcrn_accum):
+        for c, rn_accum in enumerate(crn_accum):
             for alpha, beta in params:
                 rnvb = [
                     NVerbose(n_accum, alpha, beta)
@@ -49,16 +49,16 @@ def sent_verbose(args):
                     table = table_result(nvb, args.digit)
                     chosen = '*' if r == rmax else ' '
                     print(f'S-{d+1}   \t{s_dat[d]}')
-                    print(f'H-{d+1}-{h+1} \t{hs_dat[d][h]}')
+                    print(f'C-{d+1}-{c+1} \t{cs_dat[d][c]}')
                     print(f'R-{d+1}-{r+1}{chosen}\t{rs_dat[d][r]}')
                     print(table)
 
 
 def mean_main(args):
     params = [beta_to_alpha_beta(beta) for beta in args.beta]
-    _, _, _, hdrn_accum = load_hdrn_data(args)
+    _, _, _, cdrn_accum = load_cdrn_data(args)
 
-    for drn_accum in hdrn_accum:
+    for drn_accum in cdrn_accum:
         bd_score = [[
             rn_accum_to_f(rn_accum, alpha)
             for rn_accum in drn_accum]

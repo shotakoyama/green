@@ -4,7 +4,7 @@ from functools import cache
 
 def rn_accum_to_f(rn_accum, alpha):
     rfs = rn_accum_to_r_reversed_fs(rn_accum, alpha)
-    return max(rfs)[0]
+    return max(rfs)[0] # f of 1~N
 
 
 def rn_accum_to_index(rn_accum, alpha):
@@ -27,6 +27,8 @@ def n_accum_to_gmeanf(n_accum, alpha):
         in n_accum]
     prs = np.array(prs, dtype = float)
 
+    # geometric mean of p and r
+    # [[p of 1, r of 1], [p of 1~2, r of 1~2], [p of 1~3, r of 1~3], ...]
     with np.errstate(divide = 'ignore'):
         logprs = np.log(prs)
     meancumprs = np.exp(
@@ -34,6 +36,7 @@ def n_accum_to_gmeanf(n_accum, alpha):
             /
             np.arange(1, logprs.shape[0] + 1)[:, np.newaxis])
 
+    # [f of 1, f of 1~2, ..., f of 1~N]
     fs = [
         f_score(p, r, alpha)
         for p, r
@@ -76,6 +79,7 @@ def make_params(betas):
     return [beta_to_alpha_beta(beta) for beta in betas]
 
 
+# convert beta -> alpha
 def beta_to_alpha_beta(beta):
     if beta == 'inf' or beta == 'Inf':
         alpha = 0

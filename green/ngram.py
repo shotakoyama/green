@@ -6,19 +6,19 @@ from .accum import Accumulator
 class NgramStat:
     src_dict: dict
     ref_dict: dict
-    hyp_dict: dict
+    cor_dict: dict
 
     def __getitem__(self, key):
         s = self.src_dict.get(key, 0)
         r = self.ref_dict.get(key, 0)
-        h = self.hyp_dict.get(key, 0)
-        return s, r, h
+        c = self.cor_dict.get(key, 0)
+        return s, r, c
 
     def keys(self):
         return set.union(
             set(self.src_dict),
             set(self.ref_dict),
-            set(self.hyp_dict))
+            set(self.cor_dict))
 
     def accumulate(self):
         lst = [

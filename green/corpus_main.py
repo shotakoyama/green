@@ -1,4 +1,4 @@
-from .load import load_hdrn_data
+from .load import load_cdrn_data
 from .score import (
         rn_accum_to_index,
         n_accum_to_gmeanf,
@@ -13,13 +13,13 @@ from .accum import Accumulator
 
 def corpus_main(args):
     params = [beta_to_alpha_beta(beta) for beta in args.beta]
-    _, _, _, hdrn_accum = load_hdrn_data(args)
+    _, _, _, cdrn_accum = load_cdrn_data(args)
 
     if args.verbose:
-        corpus_verbose(args, params, hdrn_accum)
+        corpus_verbose(args, params, cdrn_accum)
     else:
         corpus_simple_params(args, params)
-        corpus_simple(args, params, hdrn_accum)
+        corpus_simple(args, params, cdrn_accum)
 
 
 def corpus_simple_params(args, params):
@@ -31,8 +31,8 @@ def corpus_simple_params(args, params):
     print(beta_line)
 
 
-def corpus_simple(args, params, hdrn_accum):
-    for h, drn_accum in enumerate(hdrn_accum):
+def corpus_simple(args, params, cdrn_accum):
+    for c, drn_accum in enumerate(cdrn_accum):
         bdn_accum = make_bdn_accum(drn_accum, params)
         bn_accum = make_bn_accum(bdn_accum, args.n)
         fs = [
@@ -40,12 +40,12 @@ def corpus_simple(args, params, hdrn_accum):
             for n_accum, (alpha, _)
             in zip(bn_accum, params)]
         fs = [f_result(f, args.digit) for f in fs]
-        line = '\t'.join([args.hyp_path_list[h]] + fs)
+        line = '\t'.join([args.cor_path_list[c]] + fs)
         print(line)
 
 
-def corpus_verbose(args, params, hdrn_accum):
-    for h, drn_accum in enumerate(hdrn_accum):
+def corpus_verbose(args, params, cdrn_accum):
+    for c, drn_accum in enumerate(cdrn_accum):
         bdn_accum = make_bdn_accum(drn_accum, params)
         bn_accum = make_bn_accum(bdn_accum, args.n)
         for (alpha, beta), n_accum in zip(params, bn_accum):
@@ -57,10 +57,11 @@ def corpus_verbose(args, params, hdrn_accum):
                 print(f'{round_alpha}\t{round_beta}\t{line}')
             else:
                 table = table_result(nvb, args.digit)
-                print(f'{args.hyp_path_list[h]}\talpha={round_alpha}\tbeta={round_beta}')
+                print(f'{args.cor_path_list[c]}\talpha={round_alpha}\tbeta={round_beta}')
                 print(table)
 
 
+# accumulate for all instances
 def make_bn_accum(bdn_accum, max_n):
     bn_accum = [[
         sum([n_accum[n] for n_accum in dn_accum], start = Accumulator())
@@ -69,6 +70,7 @@ def make_bn_accum(bdn_accum, max_n):
     return bn_accum
 
 
+# choose the best references for each beta
 def make_bdn_accum(drn_accum, params):
     bdn_accum = [
         make_dn_accum(drn_accum, alpha)
@@ -76,6 +78,7 @@ def make_bdn_accum(drn_accum, params):
     return bdn_accum
 
 
+# choose the best reference index for all instances
 def make_dn_accum(drn_accum, alpha):
     dn_accum = [
         rn_accum[rn_accum_to_index(rn_accum, alpha)]

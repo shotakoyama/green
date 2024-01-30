@@ -39,11 +39,13 @@ def add_args(parser):
             nargs = '+',
             dest = 'ref_path_list')
     parser.add_argument(
+            '-c', '--cor', '--cors', '--corrected',
+            '--corrected-sentences',
             '-o', '--out', '--outs', '--outputs',
             '--hyp', '--hyps', '--hypotheses',
             required = True,
             nargs = '+',
-            dest = 'hyp_path_list')
+            dest = 'cor_path_list')
     parser.add_argument(
             '-b', '--beta', dest = 'beta',
             type = float, default = [1.0], nargs = '+',

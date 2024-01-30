@@ -33,14 +33,14 @@ class Accumulator:
 
     @classmethod
     @cache # cache works very well
-    def from_count(cls, s, r, h):
+    def from_count(cls, s, r, c):
         stat = cls(
-                min(s, r, h), # true keep
-                max(0, s - max(r, h)), # true delete
-                max(0, min(r, h) - s), # true inesrt
-                max(0, min(s, r) - h), # over delete
-                max(0, h - max(s, r)), # over insert
-                max(0, min(s, h) - r), # under delete
-                max(0, r - max(s, h))) # under insert
+                min(s, r, c), # true keep
+                max(0, s - max(r, c)), # true delete
+                max(0, min(r, c) - s), # true inesrt
+                max(0, min(s, r) - c), # over delete
+                max(0, c - max(s, r)), # over insert
+                max(0, min(s, c) - r), # under delete
+                max(0, r - max(s, c))) # under insert
         return stat
 
