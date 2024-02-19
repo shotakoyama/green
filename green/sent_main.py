@@ -5,7 +5,10 @@ from .score import (
         argmax,
         beta_to_alpha_beta)
 from .verbose import NVerbose
-from .result import f_result, table_result
+from .result import (
+        f_result,
+        table_result,
+        print_param_header)
 
 
 def sent_main(args):
@@ -57,14 +60,15 @@ def sent_verbose(args):
 def mean_main(args):
     params = [beta_to_alpha_beta(beta) for beta in args.beta]
     _, _, _, cdrn_accum = load_cdrn_data(args)
+    print_param_header(params, args.digit)
 
-    for drn_accum in cdrn_accum:
+    for c, drn_accum in enumerate(cdrn_accum):
         bd_score = [[
             rn_accum_to_f(rn_accum, alpha)
             for rn_accum in drn_accum]
             for alpha, _ in params]
         fs = [np.mean(d_score) for d_score in bd_score]
         fs = [f_result(f, args.digit) for f in fs]
-        line = '\t'.join(fs)
+        line = '\t'.join([args.cor_path_list[c]] + fs)
         print(line)
 

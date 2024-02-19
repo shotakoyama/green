@@ -7,7 +7,8 @@ from .verbose import NVerbose
 from .result import (
         round_half_up,
         f_result,
-        table_result)
+        table_result,
+        print_param_header)
 from .accum import Accumulator
 
 
@@ -18,17 +19,8 @@ def corpus_main(args):
     if args.verbose:
         corpus_verbose(args, params, cdrn_accum)
     else:
-        corpus_simple_params(args, params)
+        print_param_header(params, args.digit)
         corpus_simple(args, params, cdrn_accum)
-
-
-def corpus_simple_params(args, params):
-    alpha_list = [round_half_up(alpha, args.digit) for alpha, _ in params]
-    beta_list = [round_half_up(beta, args.digit) for _, beta in params]
-    alpha_line = '\t'.join(['alpha'] + alpha_list)
-    beta_line = '\t'.join(['beta'] + beta_list)
-    print(alpha_line)
-    print(beta_line)
 
 
 def corpus_simple(args, params, cdrn_accum):
