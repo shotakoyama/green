@@ -29,7 +29,7 @@ For example, a sentence “*a a b*” is treated as a multiset {*a*, *a*, *b*, *
 GREEN compares the match between the corrections from the source sentence $S$ to the reference sentence $R$ and the corrections from $S$ to the corrected sentence $C$.
 To count the match between $S \to R$ and $S \to C$, we introduce a Venn diagram illustrating the occurrences of word $n$-grams in $S, R, C$.
 
-<img style="width: 50%;" src="https://raw.githubusercontent.com/shotakoyama/green/main/venn.svg?token=GHSAT0AAAAAACNSWCAUIXORW4PVVILIHVDAZUZ7FSQ">
+<img style="width: 50%;" src="https://raw.githubusercontent.com/shotakoyama/green/main/venn.svg">
 
 Table below shows what types of corrections are performed in $S \to R$ and $S \to C$, respectively, for all $n$-grams in each region of this Venn diagram.
 
